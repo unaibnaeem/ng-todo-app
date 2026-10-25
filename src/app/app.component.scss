@@ -1,0 +1,8 @@
+.todo-list-container {
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: #10b981;
+}

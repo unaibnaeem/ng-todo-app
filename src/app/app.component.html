@@ -1,0 +1,142 @@
+<div
+  class="min-h-screen bg-zinc-50 px-4 py-12 transition-colors duration-200 dark:bg-zinc-950"
+>
+  <div class="mx-auto max-w-xl">
+    <div
+      class="overflow-hidden rounded-md border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+    >
+      <div
+        class="flex items-center justify-between border-b border-zinc-200 p-6 dark:border-zinc-800"
+      >
+        <h1
+          class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+        >
+          Tasks
+        </h1>
+
+        <button
+          (click)="toggleTheme()"
+          class="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          [title]="
+            theme() === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'
+          "
+        >
+          @if (theme() === "light") {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+          } @else {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"
+              />
+            </svg>
+          }
+        </button>
+      </div>
+
+      <div class="border-b border-zinc-200 p-6 dark:border-zinc-800">
+        <div class="flex gap-2">
+          <input
+            type="text"
+            [(ngModel)]="todoInput"
+            (keyup.enter)="addTodo()"
+            placeholder="Add a new task..."
+            class="flex-1 rounded-sm border border-zinc-200 bg-zinc-50 px-4 py-2 text-zinc-900 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:ring-emerald-400"
+          />
+          <button
+            (click)="addTodo()"
+            class="rounded-sm bg-emerald-600 px-4 py-2 font-medium text-white transition-colors hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+
+      <div class="divide-y divide-zinc-200 dark:divide-zinc-800">
+        @for (todo of todos(); track todo.id) {
+          <div
+            class="group flex items-center justify-between p-4 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+          >
+            <div class="flex items-center gap-3 overflow-hidden">
+              <input
+                type="checkbox"
+                [checked]="todo.completed"
+                (change)="toggleTodo(todo.id)"
+                class="h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-zinc-700 dark:text-emerald-400 dark:focus:ring-emerald-400"
+              />
+              <span
+                [class.line-through]="todo.completed"
+                [class.text-zinc-400]="todo.completed"
+                class="truncate text-zinc-900 transition-all dark:text-zinc-100"
+              >
+                {{ todo.text }}
+              </span>
+            </div>
+            <button
+              (click)="deleteTodo(todo.id)"
+              class="p-1 text-zinc-400 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100 dark:text-zinc-600 dark:hover:text-red-400"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </div>
+        } @empty {
+          <div class="p-12 text-center italic text-zinc-500 dark:text-zinc-400">
+            No tasks yet. Add one above!
+          </div>
+        }
+      </div>
+
+      @if (todos().length > 0) {
+        <div
+          class="flex items-center justify-between border-t border-zinc-200 bg-zinc-50 p-4 text-sm dark:border-zinc-800 dark:bg-zinc-900/50"
+        >
+          <span class="text-zinc-500 dark:text-zinc-400">
+            {{ remainingCount() }} items left
+          </span>
+          <button
+            (click)="clearCompleted()"
+            class="text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            Clear Completed
+          </button>
+        </div>
+      }
+    </div>
+
+    <router-outlet />
+  </div>
+</div>
